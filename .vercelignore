@@ -3,3 +3,4 @@ supabase/
 .env.local
 .env*.local
 admin/README.md
+README.md
