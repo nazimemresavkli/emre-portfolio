@@ -93,6 +93,10 @@ export function createProjectsService(adapter) {
     },
 
     async setVisible(id, visible) {
+      if (visible) {
+        const p = await this.get(id);
+        if (p && !clean(p.desc?.tr)) throw new AppError('Yayına almadan önce projeye bir açıklama (TR) ekle.');
+      }
       return toDomain(await guard(adapter.update('projects', 'id', id, { visible })));
     },
 

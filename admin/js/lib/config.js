@@ -23,9 +23,17 @@ export const FRAMES = [
   ['phone', 'Telefon çerçevesi']
 ];
 
+/** Badge names as the panel shows them ("Yayında" alone would be confused with published/draft). */
+export const BADGES = [
+  ['shipped', 'Yayınlanmış ürün'], ['inuse', 'Yayınlanmış · günlük kullanımda'], ['concept', 'Konsept'], ['', 'Rozet yok']
+];
+
 export const STATUSES = [
   ['available', 'Müsait'], ['limited', 'Sınırlı'], ['busy', 'Meşgul']
 ];
+
+/** Image src usable from /admin/: repo paths like "media/x.webp" are relative to the site root. */
+export const mediaSrc = url => (/^(https?:|data:|\/)/.test(url || '') ? url : '/' + url);
 
 /** Public URL of the site root (used for "view site" links and absolute media URLs). */
 export const siteOrigin = () => (SITE_CONFIG.siteUrl || location.origin).replace(/\/$/, '');

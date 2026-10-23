@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Yönetim paneli — Emre Şavklı</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script>
+  // Apply the saved panel theme before first paint (no light flash in dark mode).
+  try { var t = localStorage.getItem('admin_theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch (e) {}
+</script>
+<link rel="stylesheet" href="/admin/styles/admin.css">
+</head>
+<body>
+<div id="app"><div class="boot" role="status"><span class="spinner" aria-hidden="true"></span><span class="sr-only">Panel yükleniyor</span></div></div>
+<noscript><p style="padding:24px">Yönetim paneli için JavaScript gerekli.</p></noscript>
+<!-- Site config (Supabase URL + anon key), static catalog and the Supabase client, as globals -->
+<script src="/config.js"></script>
+<script src="/content.js"></script>
+<script src="/vendor/supabase.js"></script>
+<script type="module" src="/admin/js/app.js"></script>
+</body>
+</html>
