@@ -1,5 +1,7 @@
 # Emre Şavklı — Portfolyo
 
+<p align="center"><img src="docs/hero.png" alt="Portfolyo sitesinin ana ekranı: başlık, tanıtım metni ve uygulama mockup'ları" width="100%"></p>
+
 Flutter ve full-stack geliştirici Nazım Emre Şavklı'nın kişisel portfolyo sitesi ve sitenin içeriğini kod yazmadan yönettiği yönetim paneli.
 
 - **Site:** Tek sayfalık, Türkçe/İngilizce portfolyo. Seçili işler (çoklu ekran görüntüsü geçişli proje kartları), teknoloji katmanları haritası, hizmetler, çalışma süreci, deneyim ve proje talep formu.
