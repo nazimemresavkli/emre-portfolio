@@ -139,22 +139,29 @@
       settings:Object.assign({},DEF.settings,d.settings||{}),
       texts:Object.assign({},DEF.texts,d.texts||{}),
       projects:Array.isArray(d.projects)?d.projects:DEF.projects,
-      testimonials:Array.isArray(d.testimonials)?d.testimonials:(DEF.testimonials||[])
+      testimonials:Array.isArray(d.testimonials)?d.testimonials:(DEF.testimonials||[]),
+      services:Array.isArray(d.services)&&d.services.length?d.services:null,
+      seo:d.seo&&typeof d.seo==='object'?d.seo:null
     };
   }
   var C=DEF;
 
+  function sbBase(){ return String(CFG.supabaseUrl||'').replace(/\/$/,''); }
   function loadContent(){
     return new Promise(function(resolve){
       if(!CFG.supabaseUrl||!CFG.supabaseAnonKey){
         try{ var d=localStorage.getItem('demo_content'); if(d){ resolve(merge(JSON.parse(d))); return; } }catch(e){}
         resolve(DEF); return;
       }
-      var done=false, to=setTimeout(function(){ if(!done){ done=true; resolve(DEF); } },2500);
-      fetch(CFG.supabaseUrl.replace(/\/$/,'')+'/rest/v1/site_content?id=eq.1&select=data',{headers:{apikey:CFG.supabaseAnonKey,Authorization:'Bearer '+CFG.supabaseAnonKey},cache:'no-store'})
-        .then(function(r){ return r.ok?r.json():null; })
-        .then(function(rows){ if(done) return; done=true; clearTimeout(to); resolve(rows&&rows[0]&&rows[0].data?merge(rows[0].data):DEF); })
-        .catch(function(){ if(!done){ done=true; clearTimeout(to); resolve(DEF); } });
+      var done=false, finish=function(d){ if(done) return; done=true; clearTimeout(to); resolve(d); }, to=setTimeout(function(){ finish(DEF); },2500);
+      var opt={headers:{apikey:CFG.supabaseAnonKey,Authorization:'Bearer '+CFG.supabaseAnonKey},cache:'no-store'}, json=function(r){ return r.ok?r.json():null; };
+      /* CMS tables (site_payload) first; the legacy single-row blob only if the CMS migration isn't installed */
+      fetch(sbBase()+'/rest/v1/rpc/site_payload',opt).then(json)
+        .then(function(p){
+          if(p && Array.isArray(p.projects)) return merge(p);
+          return fetch(sbBase()+'/rest/v1/site_content?id=eq.1&select=data',opt).then(json).then(function(rows){ return rows&&rows[0]&&rows[0].data?merge(rows[0].data):DEF; });
+        })
+        .then(finish).catch(function(){ finish(DEF); });
     });
   }
 
@@ -335,12 +342,39 @@
   }
   function markActive(){ document.querySelectorAll('.tech').forEach(function(b){ var on=b.dataset.tech===activeTech; b.classList.toggle('active',on); b.setAttribute('aria-pressed',on?'true':'false'); }); }
 
+  /* ================= services & socials (from the CMS; static markup stays when absent) ================= */
+  function renderServices(){
+    var wrap=document.querySelector('.svc'), list=C.services; if(!wrap || !list) return;
+    /* rows are built once, before the .rv reveal tweens bind; later calls (language switch) only swap texts */
+    if(wrap.dataset.n!==String(list.length)){
+      wrap.innerHTML=list.map(function(s,i){ return '<div class="svc-row rv"><span class="svc-n">'+(i<9?'0':'')+(i+1)+'</span><span class="svc-t"></span><div class="svc-d"><span class="svc-dt"></span><div class="svc-tags"></div></div></div>'; }).join('');
+      wrap.dataset.n=String(list.length);
+    }
+    wrap.querySelectorAll('.svc-row').forEach(function(row,i){
+      var s=list[i]||{};
+      row.querySelector('.svc-t').textContent=L(s.title);
+      row.querySelector('.svc-dt').textContent=L(s.desc);
+      row.querySelector('.svc-tags').innerHTML=(s.tags||[]).map(function(t){ return '<span>'+esc(L(t))+'</span>'; }).join('');
+    });
+  }
+  var SOCIALS={linkedin:'LinkedIn',github:'GitHub',x:'X',instagram:'Instagram',behance:'Behance',dribbble:'Dribbble',youtube:'YouTube',medium:'Medium'};
+  function renderSocials(){
+    var s=C.settings.socials||{}, extra=Object.keys(SOCIALS).filter(function(k){ return k!=='linkedin' && /^https:\/\//i.test(s[k]||''); });
+    var cell=document.querySelector('.foot [data-social-cell]')||document.querySelector('.foot > a[data-linkedin]');
+    if(!cell || (!extra.length && cell.tagName==='A')) return;
+    var links=(safeUrl(C.settings.linkedin)?[['linkedin',C.settings.linkedin]]:[]).concat(extra.map(function(k){ return [k,s[k]]; }));
+    var div=document.createElement('div'); div.setAttribute('data-social-cell','');
+    div.innerHTML='<span>'+esc(U('ft_social'))+'</span>'+links.map(function(l){ return '<b><a href="'+esc(l[1])+'" target="_blank" rel="noopener" data-cursor="link"'+(l[0]==='linkedin'?' data-linkedin':'')+'>'+SOCIALS[l[0]]+' ↗</a></b>'; }).join('');
+    cell.replaceWith(div);
+  }
+
   /* ================= texts & i18n ================= */
   function applyLang(){
     var d=T[lang];
     root.lang=lang;
-    document.title=d._title;
-    var md=document.querySelector('meta[name="description"]'); if(md) md.setAttribute('content',d._desc);
+    var seo=C.seo||{};
+    document.title=L(seo.title)||d._title;
+    var md=document.querySelector('meta[name="description"]'); if(md) md.setAttribute('content',L(seo.description)||d._desc);
     document.querySelectorAll('[data-i18n]').forEach(function(el){ var v=d[el.dataset.i18n]; if(typeof v==='string') el.textContent=v; });
     document.querySelectorAll('[data-i18n-html]').forEach(function(el){ var v=d[el.dataset.i18nHtml]; if(typeof v==='string') el.innerHTML=v; });
     document.querySelectorAll('[data-i18n-ph]').forEach(function(el){ var v=d[el.dataset.i18nPh]; if(typeof v==='string') el.setAttribute('placeholder',v); });
@@ -356,6 +390,7 @@
     document.querySelectorAll('a[data-mail]').forEach(function(a){ a.href='mailto:'+C.settings.email; if(a.dataset.mail==='text') a.textContent=C.settings.email; });
     document.querySelectorAll('[data-copy]').forEach(function(b){ b.dataset.copy=C.settings.email; });
     var li=document.querySelector('a[data-linkedin]'); if(li && safeUrl(C.settings.linkedin)) li.href=C.settings.linkedin;
+    renderServices(); renderSocials();
     buildRoles(); renderCases(); renderStack(); markActive(); buildBriefChips(); tick();
     if(animated) paintGrad();
   }
@@ -480,18 +515,29 @@
         if(animated) gsap.fromTo(done.children,{y:30,opacity:0},{y:0,opacity:1,duration:.9,ease:'expo.out',stagger:.08});
         var b=done.querySelector('button'); if(b) b.focus({preventScroll:true});
       };
-      if(!C.settings.formAccessKey){
-        location.href='mailto:'+C.settings.email+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(lines.join('\n'));
-        showDone(true); return;
-      }
+      /* the message lands in the admin inbox (messages table) and, when a web3forms key is set, in the mailbox too */
+      var saved=(CFG.supabaseUrl&&CFG.supabaseAnonKey)?fetch(sbBase()+'/rest/v1/messages',{method:'POST',headers:{apikey:CFG.supabaseAnonKey,Authorization:'Bearer '+CFG.supabaseAnonKey,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({
+        name:name, email:email, company:company, project_type:types, budget:budget, start_when:time, message:msg, language:lang
+      })}).then(function(r){ return r.text().then(function(){ return r.ok; }); }).catch(function(){ return false; }):Promise.resolve(false);
       btn.disabled=true; label.textContent=U('bf_sending');
-      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({
+      var reset=function(){ btn.disabled=false; label.textContent=U('bf_send'); };
+      if(!C.settings.formAccessKey){
+        saved.then(function(ok){
+          reset();
+          if(ok){ showDone(false); return; }
+          location.href='mailto:'+C.settings.email+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(lines.join('\n'));
+          showDone(true);
+        });
+        return;
+      }
+      var mailed=fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({
         access_key:C.settings.formAccessKey, subject:subject, from_name:'Portfolio', name:name, email:email, replyto:email,
         company:company, project_type:types, budget:budget, start:time, message:msg, language:lang
-      })}).then(function(r){ return r.json().catch(function(){ return {}; }); }).then(function(j){
-        btn.disabled=false; label.textContent=U('bf_send');
-        if(j && j.success){ showDone(false); } else { err.textContent=U('e_send')(C.settings.email); }
-      }).catch(function(){ btn.disabled=false; label.textContent=U('bf_send'); err.textContent=U('e_send')(C.settings.email); });
+      })}).then(function(r){ return r.json().catch(function(){ return {}; }); }).then(function(j){ return !!(j && j.success); }).catch(function(){ return false; });
+      Promise.all([mailed,saved]).then(function(r){
+        reset();
+        if(r[0]||r[1]){ showDone(false); } else { err.textContent=U('e_send')(C.settings.email); }
+      });
     });
   }
 
