@@ -152,7 +152,8 @@ a:hover .roll span,a:focus-visible .roll span{transform:translateY(-1.3em)}
 .orb-live::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:1px solid rgba(var(--st),.6);animation:breathe 2.4s ease-out infinite}
 @keyframes breathe{0%{transform:scale(.6);opacity:1}100%{transform:scale(1.9);opacity:0}}
 .cap-sep{width:1px;height:14px;background:rgba(255,255,255,.18)}
-.cap-time{color:var(--muted);font-variant-numeric:tabular-nums}
+.cap-time{color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.cap-sep{flex:none}
 .name-wrap{position:relative}
 .role-roll{position:absolute;right:0;top:clamp(10px,2.2vw,40px);text-align:right;z-index:3}
 .rr-label{display:block;font-size:13.5px;color:var(--muted);margin-bottom:6px}
@@ -728,7 +729,7 @@ a:hover .roll span,a:focus-visible .roll span{transform:translateY(-1.3em)}
 .foot b{display:block;color:var(--text);font-weight:500;margin-top:4px}
 .foot a b{transition:color .3s}
 .foot a:hover b{color:var(--amber)}
-.foot b a{transition:color .3s}
+.foot b a{transition:color .3s;display:inline-block;padding:4px 0;margin:-4px 0}
 .foot b a:hover{color:var(--amber)}
 
 /* reveal helpers */
@@ -737,6 +738,7 @@ a:hover .roll span,a:focus-visible .roll span{transform:translateY(-1.3em)}
 
 /* ---------- responsive ---------- */
 @media (max-width:1100px){
+  .brief .status-cap .cap-sep,.brief .status-cap .cap-time{display:none}
   .stack-grid{grid-template-columns:1fr}
   .usage{position:relative;top:0}
   .stack-head{grid-template-columns:1fr}
