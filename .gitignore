@@ -1,0 +1,20 @@
+# secrets / local env
+.env.local
+.env*.local
+supabase/.env
+
+# Supabase CLI local state
+supabase/.temp/
+supabase/.branches/
+
+# test artifacts
+scratchpad/
+shots/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+node_modules/
+.vercel/

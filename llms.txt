@@ -1,0 +1,46 @@
+# Emre Şavklı (Nazım Emre Şavklı)
+
+> Freelance Flutter and full-stack developer with 10+ years in software development, building and shipping cross-platform apps, web panels and the backends behind them. Based in Istanbul, Türkiye, working remotely with teams in Europe, the UK and the Middle East (GMT+3). Open to freelance and contract work. Also offers business systems, admin panels, SEO and GEO.
+
+Contact: nazimemresavkli@gmail.com
+LinkedIn: https://www.linkedin.com/in/emre246/
+Website: https://alan-adin.com/
+
+## Services
+
+- Mobile app development: cross-platform iOS and Android apps with Flutter, released and maintained on the App Store and Google Play.
+- Web application development: customer portals, booking and ordering systems built with Next.js and React.
+- Business systems: internal process digitisation, approval flows, reporting, role-based access and integrations.
+- Admin panels and content management: panels to manage content, users and orders without code.
+- Backend, API and payments: Supabase, Go, PostgreSQL, Firebase; Stripe, iyzico and RevenueCat subscriptions.
+- AI features: in-app analysis and assistants with the OpenAI API.
+- SEO and GEO: technical SEO, structured data and content structure for visibility on Google and in AI assistants such as ChatGPT, Gemini and Perplexity.
+
+## Selected projects
+
+- Lara Laundry (shipped): on-demand laundry marketplace. Customer app, staff operations app and admin panel on one backend: booking, live order tracking, a wallet-and-loyalty ledger, coupons and payments. Role: full build. Flutter, Go, PostgreSQL.
+- Farabi BES (shipped, in daily use): work-based training platform for a vocational high school (85 students, 22 teachers). Teacher and coordinator app plus web admin panel: attendance, placements, salary-receipt tracking, approval flows, PDF reports. Role: full build (co-developed). Flutter, Next.js, Supabase.
+- Northwind (concept): retail operations platform with a product-led marketing website and a data-dense admin dashboard. Role: design and front-end. Next.js, React, TypeScript.
+- Pulse (concept): AI-guided strength and fitness coaching with an adaptive weekly plan, live set tracker and muscle map. Role: product design and front-end. Flutter, Riverpod, HealthKit.
+- Nesto (concept): on-demand home services with booking, live map tracking and in-app payment. Role: product design and front-end. Flutter, Maps SDK, Stripe.
+- Sofra (concept): restaurant ordering and delivery with menu, customisation, cart and live delivery tracking. Role: product design and front-end. Flutter, Go, Maps.
+- Also built: Yaser Turizm, a B2B tour-operations app (seat planning, group bookings, Excel/PDF export), and own subscription apps on the App Store and Google Play.
+
+## Skills
+
+- Mobile: Flutter, Dart, Riverpod, Clean Architecture, Kotlin, Java, Jetpack Compose
+- Backend: Supabase, PostgreSQL, Go, Node.js, REST APIs, Auth
+- Web: Next.js, React, TypeScript, Vue.js, Tailwind CSS
+- Payments and release: Stripe, RevenueCat, iyzico, in-app subscriptions, App Store, Google Play, TestFlight
+- Ways of working: Agile, AI-assisted development, code review, security review, Git, Figma
+
+## Experience
+
+- Freelance Mobile & Full-Stack Developer, 2016 to present.
+- Information Technology Teacher, Vocational & Technical Anatolian High School, 2008 to present.
+- Software Developer, Retua Design Lab, 2012 to 2014.
+- Software Instructor (Android, Flutter, web, databases), 2006 to present.
+
+## Languages
+
+Turkish and English.
