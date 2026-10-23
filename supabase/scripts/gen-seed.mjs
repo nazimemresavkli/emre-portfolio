@@ -86,4 +86,18 @@ out.push(builtin.map(m => `  ('builtin', ${lit(m.path)}, ${lit(m.path)}, ${lit(m
 out.push('on conflict (path) do nothing;');
 
 fs.writeFileSync(path.join(ROOT, 'supabase/seed.sql'), out.join('\n') + '\n');
-console.log(`seed.sql: ${DEF.projects.length} projects, ${services.length} services, ${builtin.length} builtin media`);
+
+// The admin panel's demo mode (no Supabase configured) starts from the very same rows.
+const now = new Date().toISOString();
+const demo = {
+  settings: { id: 1, status: st.status, available_from: st.availableFrom || { tr: '', en: '' }, email: st.email, linkedin: st.linkedin, socials: {},
+    form_access_key: st.formAccessKey || '', admin_theme: 'system', default_project_theme: 'cobalt', updated_at: now },
+  content_sections: Object.entries(sections).map(([key, data]) => ({ key, data, updated_at: now })),
+  projects: DEF.projects.map((p, i) => ({ id: p.id, sort_order: (i + 1) * 10, visible: p.visible !== false, featured: p.featured !== false, badge: p.badge || '',
+    theme: p.theme || 'cobalt', mock: p.mock || '', name: p.name, cat: p.cat, description: p.desc, tags: p.tags || { tr: [], en: [] }, facts: p.facts || [],
+    tech: p.tech || [], media: p.media || [], created_at: now, updated_at: now })),
+  media: builtin.map((m, i) => ({ id: 'builtin-' + (i + 1), kind: 'builtin', path: m.path, url: m.path, mime: m.mime, size_bytes: m.size, width: m.w, height: m.h, alt: '', created_at: now })),
+  messages: []
+};
+fs.writeFileSync(path.join(ROOT, 'admin/js/services/adapters/demo-seed.json'), JSON.stringify(demo) + '\n');
+console.log(`seed.sql + demo-seed.json: ${DEF.projects.length} projects, ${services.length} services, ${builtin.length} builtin media`);
