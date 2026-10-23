@@ -1,5 +1,7 @@
 # Kurulum rehberi
 
+> **Güncel kurulum ve yeni yönetim paneli için `admin/README.md` dosyasına bak.** Bu dosya eski tek dosyalık paneli (`admin-legacy.html`) ve `supabase/setup.sql` akışını anlatır.
+
 Site, Supabase bağlanmadan da çalışır: içerik `content.js` dosyasından gelir ve `/admin` paneli demo modunda açılır. Aşağıdaki adımlar paneli gerçek hâle getirir; yaptığın değişiklikler kaydettiğin anda herkese açık sitede görünür.
 
 ## 1. Siteyi Vercel'de yayınla

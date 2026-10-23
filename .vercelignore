@@ -2,3 +2,4 @@ KURULUM.md
 supabase/
 .env.local
 .env*.local
+admin/README.md
