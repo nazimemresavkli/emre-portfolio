@@ -101,6 +101,7 @@ async function renderRoute(route, content) {
   cleanup?.(); cleanup = null;
   setState({ route, dirty: false });
   document.title = `${route.title} — Yönetim paneli`;
+  refreshCounts(); // new contact-form messages show up in the sidebar badge without a reload
   mount(content, loadingState());
 
   if (route.name === 'notFound') {
