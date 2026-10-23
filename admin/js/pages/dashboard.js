@@ -45,5 +45,6 @@ export async function render({ services, root }) {
           h('a', { class: 'btn', href: '#/content/services' }, icon('content', 16), 'Hizmetleri düzenle'),
           h('a', { class: 'btn', href: '#/media' }, icon('upload', 16), 'Görsel yükle'),
           h('a', { class: 'btn', href: '#/messages' }, icon('messages', 16), fresh ? `Yeni mesajlar (${fresh})` : 'Mesajlar'),
+          h('a', { class: 'btn', href: '#/reports' }, icon('chart', 16), 'Raporlar'),
           h('a', { class: 'btn', href: siteOrigin() + '/', target: '_blank', rel: 'noopener' }, icon('external', 16), 'Siteyi yeni sekmede aç')))));
 }

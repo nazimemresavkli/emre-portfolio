@@ -8,6 +8,7 @@ const ROUTES = [
   { re: /^\/content(?:\/([a-z]+))?$/, name: 'content', title: 'İçerik', params: m => ({ key: m[1] || 'hero' }) },
   { re: /^\/media$/, name: 'media', title: 'Medya' },
   { re: /^\/messages(?:\/([A-Za-z0-9-]+))?$/, name: 'messages', title: 'Mesajlar', params: m => ({ id: m[1] || null }) },
+  { re: /^\/reports$/, name: 'reports', title: 'Raporlar' },
   { re: /^\/settings$/, name: 'settings', title: 'Ayarlar' }
 ];
 

@@ -36,9 +36,10 @@ admin/
       mediaService.js        Görsel kütüphanesi: yükleme, kullanım tespiti, silme
       messagesService.js     Gelen kutusu: okundu / arşiv / silme
       settingsService.js     Site ayarları, sosyal linkler, panel teması
+      reportsService.js      Raporlar: içerik + mesaj verisinden saf hesaplama (buildReport)
       index.js               Adapter'ı seçip tüm servisleri bağlar
-    components/              sidebar, topbar, dataTable, modal, confirmDialog, formField, toast, emptyState
-    pages/                   login, dashboard, projects, projectEdit, content, media, messages, settings
+    components/              sidebar, topbar, dataTable, modal, confirmDialog, formField, toast, emptyState, charts
+    pages/                   login, dashboard, projects, projectEdit, content, media, messages, reports, settings
   README.md
 ```
 
@@ -154,6 +155,8 @@ Storage bucket'ı `media` herkese açık okunur, yalnızca yöneticiler yazar ve
   - Sosyal medya önizlemeleri (`og:` etiketleri) `index.html`'de sabit kalır.
 - **Medya:** Sürükle-bırak ile yükleme; dosyalar en fazla 2200 px'e küçültülüp WebP'ye çevrilir. URL kopyalama, açıklama düzenleme. Silerken görsel bir projede kullanılıyorsa uyarı verir. Repodaki dosyalar silinemez.
 - **Mesajlar:** Gelen kutusu, okunmamış, arşiv ve tümü filtreleri; arama. Açılan mesaj okundu sayılır. Okunmadı yap, arşivle, sil (onaylı) ve e-postayla yanıtla seçenekleri var.
+- **Raporlar:** Proje (toplam/yayında/taslak, rozet, teknoloji katmanı, en çok kullanılan teknolojiler, yerleşim), medya (sayı, boyut, kullanılmayan yüklemeler, en büyük dosyalar), mesajlar (durum, proje türü, son 30 günün haftalık grafiği) ve içerik güncelliği. Her grafiğin tablo görünümü var; çubuklar klavyeyle odaklanınca değer gösterir.
+  - Raporlar yalnızca sitedeki içerik ve form mesajlarından üretilir. Ziyaretçi/trafik analitiği için Vercel Analytics veya Plausible gibi bir sağlayıcı gerekir.
 - **Ayarlar:** Durum (müsait/sınırlı/meşgul ve tarih), e-posta, LinkedIn, sosyal linkler (footer'da gösterilir), web3forms anahtarı, panel teması (sistem/açık/koyu), yeni projeler için varsayılan kart teması.
   - Sitenin renk paleti sabittir ve panelden değiştirilemez.
 - **Klavye:** "İçeriğe geç" bağlantısı, görünür odak, `Esc` ile pencere ve menü kapatma, sekmelerde ←/→.

@@ -111,16 +111,23 @@ async function renderRoute(route, content) {
   try {
     const page = await import(`./pages/${route.name}.js`);
     if (seq !== renderSeq) return; // user navigated again meanwhile
+    // The page renders into its own container and is only swapped in if it is still the current
+    // route when its data arrives, so a slow page can never overwrite the one the user moved to.
+    const pageRoot = h('div', { class: 'page' });
+    const current = () => seq === renderSeq;
     const ctx = {
-      services, params: route.params, root: content,
+      services, params: route.params, root: pageRoot,
       navigate: path => router.navigate(path),
-      replaceRoute: path => { keepScrollY = window.scrollY; router.replace(path); },
-      setTitle: title => { setState({ route: { ...state.route, title } }); document.title = `${title} — Yönetim paneli`; },
-      setDirty: dirty => { if (state.dirty !== dirty) setState({ dirty }); },
+      replaceRoute: path => { if (!current()) return; keepScrollY = window.scrollY; router.replace(path); },
+      setTitle: title => { if (!current()) return; setState({ route: { ...state.route, title } }); document.title = `${title} — Yönetim paneli`; },
+      setDirty: dirty => { if (current() && state.dirty !== dirty) setState({ dirty }); },
       refreshCounts,
-      isCurrent: () => seq === renderSeq
+      isCurrent: current
     };
-    cleanup = (await page.render(ctx)) || null;
+    const pageCleanup = (await page.render(ctx)) || null;
+    if (!current()) { pageCleanup?.(); return; }
+    cleanup = pageCleanup;
+    mount(content, pageRoot);
   } catch (e) {
     if (seq !== renderSeq) return;
     mount(content, errorState(friendlyError(e), () => renderRoute(route, content)));

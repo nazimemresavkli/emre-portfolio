@@ -7,6 +7,7 @@ export const NAV = [
   { name: 'content', href: '#/content', label: 'İçerik', icon: 'content' },
   { name: 'media', href: '#/media', label: 'Medya', icon: 'media' },
   { name: 'messages', href: '#/messages', label: 'Mesajlar', icon: 'messages' },
+  { name: 'reports', href: '#/reports', label: 'Raporlar', icon: 'chart' },
   { name: 'settings', href: '#/settings', label: 'Ayarlar', icon: 'settings' }
 ];
 

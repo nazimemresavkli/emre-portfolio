@@ -7,10 +7,13 @@ import { createContentService } from './contentService.js';
 import { createMediaService } from './mediaService.js';
 import { createMessagesService } from './messagesService.js';
 import { createSettingsService } from './settingsService.js';
+import { createReportsService } from './reportsService.js';
 
 /** Picks the adapter (Supabase when config.js is filled in, demo otherwise) and wires every service to it. */
 export async function createServices() {
   const adapter = isConfigured() ? createSupabaseAdapter() : await createDemoAdapter();
+  const projects = createProjectsService(adapter), content = createContentService(adapter);
+  const media = createMediaService(adapter), messages = createMessagesService(adapter);
   return {
     mode: adapter.kind,
     auth: {
@@ -19,11 +22,9 @@ export async function createServices() {
       signOut: () => guard(adapter.auth.signOut()),
       isAdmin: () => guard(adapter.auth.isAdmin())
     },
-    projects: createProjectsService(adapter),
-    content: createContentService(adapter),
-    media: createMediaService(adapter),
-    messages: createMessagesService(adapter),
+    projects, content, media, messages,
     settings: createSettingsService(adapter),
+    reports: createReportsService({ projects, media, messages, content }),
     resetDemo: adapter.kind === 'demo' ? () => adapter.reset() : null
   };
 }
